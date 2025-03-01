@@ -34,6 +34,8 @@ const ProductCard: React.FC<ProductProps> = ({
         cursor: 'pointer',
         p: 2,
         transition: '0.3s',
+        position: 'relative',
+        overflow: 'visible',
         '&:hover': { boxShadow: 3 },
       }}
       onClick={onSelect}
@@ -41,36 +43,53 @@ const ProductCard: React.FC<ProductProps> = ({
       <CardContent>
         {/* Discount */}
         {discount && (
-          <Box
-            sx={{
+          <span
+            style={{
               backgroundColor: 'green',
               color: 'white',
-              fontSize: 12,
-              px: 1,
-              py: 0.5,
-              borderRadius: 1,
+              fontSize: '12px',
+              padding: '4px 8px',
+              borderRadius: '8px',
               display: 'inline-block',
             }}
           >
             {discount}
-          </Box>
+          </span>
         )}
 
         {/* Badge */}
         {badge && (
-          <Box
-            sx={{
-              backgroundColor: 'yellow',
-              fontSize: 12,
-              px: 1,
-              py: 0.5,
-              borderRadius: 1,
-              ml: 1,
-              display: 'inline-block',
+          <span
+            style={{
+              position: 'absolute',
+              zIndex: 5,
+              top: '-32px',
+              left: '200px',
+              width: '162.45px',
+              height: '49.48px',
+              gap: '6.16px',
+              borderRadius: '55.45px',
+              background: '#fece1f',
+              color: '#181B29',
+              transform: 'rotate(4.26deg)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '9.24px 24.64px',
             }}
           >
-            🚀 {badge}
-          </Box>
+            <span
+              style={{
+                fontFamily: 'Inter',
+                fontWeight: 600,
+                fontSize: '16px',
+                lineHeight: '30.81px',
+                letterSpacing: '0.15px',
+              }}
+            >
+              🚀 {badge}
+            </span>
+          </span>
         )}
 
         <Box display="flex" alignItems="center" mt={1}>
