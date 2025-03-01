@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
 import ProductCard from './ProductCard';
 
@@ -25,7 +25,7 @@ const plans: {
   {
     id: 'weekly',
     name: '7-day Access',
-    price: 2.0,
+    price: 2.00,
     currency: 'USD',
     period: 'then $39.99 per month',
   },
@@ -35,17 +35,12 @@ const plans: {
     oldPrice: 49.99,
     price: 29.99,
     currency: 'USD',
-    badge: 'Most popular',
+    discount: 'Most Popular',
   },
 ];
 
 const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   return (
     <Container maxWidth="xs" sx={{ py: 4 }}>
@@ -54,21 +49,20 @@ const PricingTable: React.FC = () => {
       </Typography>
 
       <Box display="flex" flexDirection="column" gap={2}>
-        {isClient &&
-          plans.map((plan) => (
-            <ProductCard
-              key={plan.id}
-              name={plan.name}
-              oldPrice={plan.oldPrice}
-              price={plan.price}
-              currency={plan.currency}
-              discount={plan.discount}
-              badge={plan.badge}
-              period={plan.period}
-              selected={selectedPlan === plan.id}
-              onSelect={() => setSelectedPlan(plan.id)}
-            />
-          ))}
+        {plans.map((plan) => (
+          <ProductCard
+            key={plan.id}
+            name={plan.name}
+            oldPrice={plan.oldPrice}
+            price={plan.price}
+            currency={plan.currency}
+            discount={plan.discount}
+            badge={plan.badge}
+            period={plan.period}
+            selected={selectedPlan === plan.id}
+            onSelect={() => setSelectedPlan(plan.id)}
+          />
+        ))}
       </Box>
 
       <Button

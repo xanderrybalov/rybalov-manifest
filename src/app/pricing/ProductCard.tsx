@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Card, CardContent, Typography, Box, Radio } from '@mui/material';
 
 interface ProductProps {
@@ -24,12 +24,6 @@ const ProductCard: React.FC<ProductProps> = ({
   selected,
   onSelect,
 }) => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   return (
     <Card
       variant="outlined"
@@ -80,9 +74,7 @@ const ProductCard: React.FC<ProductProps> = ({
         )}
 
         <Box display="flex" alignItems="center" mt={1}>
-          {isClient && (
-            <Radio checked={selected} onChange={onSelect} color="primary" />
-          )}
+          <Radio checked={selected} onChange={onSelect} color="primary" />
           <Typography variant="h6">{name}</Typography>
         </Box>
 
@@ -92,11 +84,11 @@ const ProductCard: React.FC<ProductProps> = ({
               variant="body2"
               sx={{ textDecoration: 'line-through', color: 'grey.500', mr: 1 }}
             >
-              ${oldPrice}
+              ${oldPrice.toFixed(2)}
             </Typography>
           )}
           <Typography variant="h5" color="primary">
-            ${price}
+            ${price.toFixed(2)}
           </Typography>
           <Typography variant="body2" sx={{ color: 'grey.600', ml: 1 }}>
             {period}
