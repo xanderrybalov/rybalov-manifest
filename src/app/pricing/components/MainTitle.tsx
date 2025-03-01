@@ -22,7 +22,7 @@ const MainTitle = ({ text }: MainTitleProps) => {
         letterSpacing: '-0.25px',
         color: '#181B29',
         paddingTop: '20px',
-        [theme.breakpoints.up('md')]: {
+        [theme.breakpoints.up('sm')]: {
           paddingTop: '44px',
           fontWeight: 600,
           fontSize: '45px',
