@@ -45,15 +45,33 @@ const ProductCard: React.FC<ProductProps> = ({
         {discount && (
           <span
             style={{
-              backgroundColor: 'green',
-              color: 'white',
-              fontSize: '12px',
-              padding: '4px 8px',
-              borderRadius: '8px',
-              display: 'inline-block',
+              position: 'absolute',
+              top: '-16px',
+              left: '44px',
+              width: 'auto',
+              height: '28px',
+              borderRadius: '28px',
+              background: '#00B39B',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '4px 9px 4px 10px',
+              gap: '4px',
             }}
           >
-            {discount}
+            <span
+              style={{
+                fontFamily: 'Inter',
+                fontWeight: 600,
+                fontSize: '12px',
+                lineHeight: '20px',
+                letterSpacing: '0.1px',
+                textAlign: 'center',
+                color: '#FFFFFF',
+              }}
+            >
+              {discount}
+            </span>
           </span>
         )}
 

@@ -30,6 +30,7 @@ const plans: {
     oldPrice: 10.0,
     price: 1.0,
     currency: 'USD',
+    discount: 'Save 90%',
     period: 'then $39.99 per month',
   },
   {
@@ -52,7 +53,7 @@ const PricingTable: React.FC = () => {
       <Box
         display="flex"
         flexDirection="column"
-        gap={2}
+        gap={'28px'}
         sx={{ pt: '45px', pb: '24px' }}
       >
         {plans.map((plan) => (
