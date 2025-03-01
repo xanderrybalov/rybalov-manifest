@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
 import ProductCard from './ProductCard';
+import MainTitle from './components/MainTitle';
 
 const plans: {
   id: string;
@@ -25,7 +26,7 @@ const plans: {
   {
     id: 'weekly',
     name: '7-day Access',
-    price: 2.00,
+    price: 2.0,
     currency: 'USD',
     period: 'then $39.99 per month',
   },
@@ -43,10 +44,8 @@ const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
 
   return (
-    <Container maxWidth="xs" sx={{ py: 4 }}>
-      <Typography variant="h4" fontWeight="bold" align="center" mb={2}>
-        Choose your plan:
-      </Typography>
+    <Container maxWidth="xs" sx={{ py: '77px' }}>
+      <MainTitle text="Choose your plan:" />
 
       <Box display="flex" flexDirection="column" gap={2}>
         {plans.map((plan) => (
