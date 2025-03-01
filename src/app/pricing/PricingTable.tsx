@@ -53,7 +53,7 @@ const PricingTable: React.FC = () => {
       <Box
         display="flex"
         flexDirection="column"
-        gap={'28px'}
+        gap={'25px'}
         sx={{ pt: '45px', pb: '24px' }}
       >
         {plans.map((plan) => (

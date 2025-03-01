@@ -28,8 +28,8 @@ const ProductCard: React.FC<ProductProps> = ({
     <Card
       variant="outlined"
       sx={{
-        borderWidth: selected ? 2 : 1,
-        borderColor: selected ? 'primary.main' : 'grey.300',
+        borderWidth: 4,
+        borderColor: selected ? '#00B39B' : '#d7f4f3',
         borderRadius: 3,
         cursor: 'pointer',
         p: 2,
