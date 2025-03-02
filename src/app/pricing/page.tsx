@@ -9,7 +9,6 @@ const PricingPage = () => (
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      bgcolor: 'grey.100',
       backgroundImage: `
         url('/background_texture_square.webp'),
         linear-gradient(253deg, #E3FFFE 23.91%, #E6EDFD 78.01%)

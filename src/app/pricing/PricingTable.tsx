@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Container,
   Typography,
@@ -11,6 +11,7 @@ import ProductCard from './ProductCard';
 import MainTitle from './components/MainTitle';
 import FilledButton from './components/FilledButton';
 import Timer from './components/Timer';
+import ToolBar from './components/ToolBar';
 
 const plans: {
   id: string;
@@ -52,15 +53,30 @@ const plans: {
 
 const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
+  const [hydrated, setHydrated] = useState(false); // Флаг, чтобы дождаться загрузки клиента
   const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true });
 
-  // Если не десктоп, инвертируем порядок карточек
-  const sortedPlans = isDesktop ? plans : [...plans].reverse();
+  // Убираем гидрацию
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  // Используем useMemo, чтобы избежать пересортировки массива при каждом рендере
+  const sortedPlans = useMemo(
+    () => (isDesktop ? plans : [...plans].reverse()),
+    [isDesktop]
+  );
+
+  // Ждем, пока завершится гидрация
+  if (!hydrated) {
+    return null;
+  }
 
   return (
     <Container sx={{ py: '77px' }}>
       <MainTitle text="Choose your plan:" />
+      <ToolBar />
 
       {!isDesktop && <Timer time={'12:00'} />}
       <Box
