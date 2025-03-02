@@ -58,11 +58,47 @@ const plans: Product[] = [
 const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
   const [hydrated, setHydrated] = useState(false);
+  const [timerExpired, setTimerExpired] = useState(false);
+  const [time, setTime] = useState('12:00');
+
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true });
 
   useEffect(() => {
     setHydrated(true);
+
+    if (typeof window === 'undefined') return;
+
+    const storedTimer = localStorage.getItem('timerExpired');
+    if (storedTimer === 'true') {
+      setTimerExpired(true);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setTime((prevTime) => {
+        const [minutes, seconds] = prevTime.split(':').map(Number);
+        if (minutes === 0 && seconds === 0) {
+          localStorage.setItem('timerExpired', 'true');
+          setTimerExpired(true);
+          return '00:00';
+        }
+
+        let newMinutes = minutes;
+        let newSeconds = seconds - 1;
+
+        if (newSeconds < 0) {
+          newMinutes -= 1;
+          newSeconds = 59;
+        }
+
+        return `${newMinutes.toString().padStart(2, '0')}:${newSeconds
+          .toString()
+          .padStart(2, '0')}`;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const sortedPlans = useMemo(
@@ -70,16 +106,13 @@ const PricingTable: React.FC = () => {
     [isDesktop]
   );
 
-  if (!hydrated) {
-    return null;
-  }
+  if (!hydrated) return null;
 
   return (
     <Container sx={{ py: '77px' }}>
       <MainTitle text="Choose your plan:" />
       <ToolBar />
-
-      {!isDesktop && <Timer time={'12:00'} />}
+      {!isDesktop && !timerExpired && <Timer time={time} />}{' '}
       <Box
         display="flex"
         flexDirection="column"
@@ -105,14 +138,16 @@ const PricingTable: React.FC = () => {
               trial_amount={plan.trial_amount}
               trial_period={plan.trial_period}
               currency={plan.currency}
-              discount={plan.discount}
+              discount={!timerExpired ? plan.discount : undefined}
               badge={plan.badge}
               period={plan.regularity}
               selected={selectedPlan === plan.id}
               onSelect={() => setSelectedPlan(plan.id)}
+              timer={time}
             />
           ))}
         </Box>
+
         <Container
           sx={{
             alignItems: 'center',
@@ -123,22 +158,54 @@ const PricingTable: React.FC = () => {
           <FilledButton
             sx={{ alignItems: 'center', display: 'flex' }}
             text="Get Started"
+            onClick={() => {
+              const selectedProduct = plans.find((p) => p.id === selectedPlan);
+              if (selectedProduct) {
+                console.log(
+                  `SelectedProduct: ID = ${selectedProduct.id}, Name = ${selectedProduct.name}`
+                );
+              }
+            }}
           />
         </Container>
         <Typography
           variant="caption"
           align="center"
           display="block"
-          color="grey.500"
-          mt={1}
+          sx={{
+            fontFamily: 'Inter',
+            fontWeight: 400,
+            fontSize: '12px',
+            lineHeight: '20px',
+            letterSpacing: '0.1px',
+            textAlign: 'center',
+            color: 'grey.500',
+          }}
         >
           Automatic renewal of{' '}
           {plans.find((p) => p.id === selectedPlan)?.trial_period.toFixed(2)}
           {' $ '}
           per month.
-          <br /> You may cancel by support@justdone.ai. Our goal is customer
           <br />
-          satisfaction
+          You may cancel by{' '}
+          <Typography
+            component="a"
+            href="mailto:support@justdone.ai"
+            sx={{
+              fontFamily: 'Inter',
+              fontWeight: 400,
+              fontSize: '12px',
+              lineHeight: '20px',
+              letterSpacing: '0.1px',
+              textAlign: 'center',
+              textDecoration: 'underline',
+              color: 'inherit',
+              '&:hover': { color: 'primary.main' },
+            }}
+          >
+            support@justdone.ai
+          </Typography>
+          . Our goal is customer <br /> satisfaction.
         </Typography>
       </Box>
     </Container>

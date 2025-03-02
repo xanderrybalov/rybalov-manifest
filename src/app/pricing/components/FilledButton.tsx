@@ -3,6 +3,7 @@ import { Button, styled, SxProps, Theme } from '@mui/material';
 interface FilledButtonProps {
   text: string;
   sx?: SxProps<Theme>;
+  onClick: () => void;
 }
 
 const StyledButton = styled(Button)({
@@ -24,9 +25,9 @@ const StyledButton = styled(Button)({
   },
 });
 
-const FilledButton = ({ text, sx }: FilledButtonProps) => {
+const FilledButton = ({ text, sx, onClick }: FilledButtonProps) => {
   return (
-    <StyledButton variant="contained" sx={sx}>
+    <StyledButton variant="contained" sx={sx} onClick={onClick}>
       {text}
     </StyledButton>
   );

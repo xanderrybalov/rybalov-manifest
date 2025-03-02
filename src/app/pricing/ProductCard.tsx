@@ -13,6 +13,7 @@ interface ProductProps {
   badge?: 'Best value' | 'Most popular';
   discount?: string;
   selected: boolean;
+  timer: string;
   onSelect: () => void;
 }
 
@@ -24,6 +25,7 @@ const ProductCard: React.FC<ProductProps> = ({
   badge,
   discount,
   selected,
+  timer,
   onSelect,
 }) => {
   const theme = useTheme();
@@ -145,7 +147,7 @@ const ProductCard: React.FC<ProductProps> = ({
             width={18}
             height={18}
           />
-          SALE ENDS IN {'12:00'}
+          SALE ENDS IN {timer}
         </Box>
       )}
       <Box sx={{ padding: '12px 16px 12px 12px', position: 'relative' }}>
