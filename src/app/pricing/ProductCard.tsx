@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
-import { Card, Typography, Box, Radio } from '@mui/material';
+import { Card, Typography, Box } from '@mui/material';
+import StyledRadio from './components/StyledRadio';
 
 interface ProductProps {
   name: string;
@@ -115,9 +116,21 @@ const ProductCard: React.FC<ProductProps> = ({
           display="flex"
           justifyContent={'space-between'}
           alignItems={'center'}
+          gap={'8px'}
         >
-          <Radio checked={selected} onChange={onSelect} color="primary" />
-          <Typography variant="h6">{name}</Typography>
+          <StyledRadio checked={selected} onChange={onSelect} />
+          <Typography
+            variant="h6"
+            sx={{
+              color: '#22293B',
+              fontWeight: 700,
+              fontSize: '17px',
+              lineHeight: '24px',
+              letterSpacing: '0.15px',
+            }}
+          >
+            {name}
+          </Typography>
           <Box
             display="flex"
             alignItems="flex-end"
