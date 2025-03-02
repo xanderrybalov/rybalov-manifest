@@ -111,11 +111,13 @@ const ProductCard: React.FC<ProductProps> = ({
           </span>
         )}
 
-        <Box display="flex" justifyContent={'space-between'}>
-          <Box display="flex" alignItems="center">
-            <Radio checked={selected} onChange={onSelect} color="primary" />
-            <Typography variant="h6">{name}</Typography>
-          </Box>
+        <Box
+          display="flex"
+          justifyContent={'space-between'}
+          alignItems={'center'}
+        >
+          <Radio checked={selected} onChange={onSelect} color="primary" />
+          <Typography variant="h6">{name}</Typography>
           <Box
             display="flex"
             alignItems="flex-end"
@@ -124,23 +126,41 @@ const ProductCard: React.FC<ProductProps> = ({
             sx={{ color: 'common.black' }}
           >
             {oldPrice && (
-              <Typography
-                variant="body2"
-                sx={{
-                  textDecoration: 'line-through',
-                  color: 'grey.500',
-                  mr: 1,
+              <span
+                style={{
+                  fontWeight: 400,
+                  fontSize: '12px',
+                  lineHeight: '20px',
+                  letterSpacing: '0.5px',
+                  opacity: '80%',
+                  textDecoration: 'line-through red',
                 }}
               >
                 ${oldPrice.toFixed(2)}
-              </Typography>
+              </span>
             )}
-            <Typography variant="h5" color="primary">
+            <span
+              style={{
+                color: '#3B71F7',
+                fontWeight: 700,
+                fontSize: '20px',
+                lineHeight: '24px',
+                letterSpacing: '0.1px',
+              }}
+            >
               ${price.toFixed(2)}
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'grey.600', ml: 1 }}>
+            </span>
+            <span
+              style={{
+                color: '#181B29',
+                fontWeight: 400,
+                fontSize: '12px',
+                lineHeight: '20px',
+                letterSpacing: '0.1px',
+              }}
+            >
               {period}
-            </Typography>
+            </span>
           </Box>
         </Box>
       </Box>
