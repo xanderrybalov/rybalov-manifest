@@ -23,13 +23,12 @@ const plans: {
   period?: string;
 }[] = [
   {
-    id: 'annual',
-    name: 'Unlimited Annual Plan',
-    oldPrice: 49.99,
-    price: 24.99,
+    id: 'monthly',
+    name: 'Unlimited 1-monthly Plan',
+    oldPrice: 69.99,
+    price: 39.99,
     currency: 'USD',
-    discount: 'Save 50%',
-    badge: 'Best value',
+    discount: 'Most Popular',
   },
   {
     id: 'weekly',
@@ -41,12 +40,13 @@ const plans: {
     period: 'then $39.99 per month',
   },
   {
-    id: 'monthly',
-    name: 'Unlimited 1-monthly Plan',
-    oldPrice: 69.99,
-    price: 39.99,
+    id: 'annual',
+    name: 'Unlimited Annual Plan',
+    oldPrice: 49.99,
+    price: 24.99,
     currency: 'USD',
-    discount: 'Most Popular',
+    discount: 'Save 50%',
+    badge: 'Best value',
   },
 ];
 
@@ -54,6 +54,9 @@ const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+
+  // Если не десктоп, инвертируем порядок карточек
+  const sortedPlans = isDesktop ? plans : [...plans].reverse();
 
   return (
     <Container sx={{ py: '77px' }}>
@@ -78,7 +81,7 @@ const PricingTable: React.FC = () => {
             },
           }}
         >
-          {plans.map((plan) => (
+          {sortedPlans.map((plan) => (
             <ProductCard
               key={plan.id}
               name={plan.name}
