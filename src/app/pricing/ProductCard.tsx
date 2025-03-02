@@ -28,6 +28,7 @@ const ProductCard: React.FC<ProductProps> = ({
   return (
     <Card
       variant="outlined"
+      role="button"
       sx={{
         borderWidth: 4,
         borderColor: selected ? '#00B39B' : '#d7f4f3',
@@ -42,27 +43,24 @@ const ProductCard: React.FC<ProductProps> = ({
       }}
       onClick={onSelect}
     >
-      <Box sx={{ padding: '12px 16px 12px 12px' }}>
+      <Box sx={{ padding: '12px 16px 12px 12px', position: 'relative' }}>
         {/* Discount */}
         {discount && (
-          <span
-            style={{
+          <Box
+            sx={{
               position: 'absolute',
               top: '-16px',
               left: '44px',
-              width: 'auto',
-              height: '28px',
               borderRadius: '28px',
               background: '#00B39B',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '4px 9px 4px 10px',
-              gap: '4px',
+              padding: '4px 9px',
             }}
           >
-            <span
-              style={{
+            <Typography
+              sx={{
                 fontFamily: 'Inter',
                 fontWeight: 600,
                 fontSize: '12px',
@@ -73,21 +71,20 @@ const ProductCard: React.FC<ProductProps> = ({
               }}
             >
               {discount}
-            </span>
-          </span>
+            </Typography>
+          </Box>
         )}
 
         {/* Badge */}
         {badge && (
-          <span
-            style={{
+          <Box
+            sx={{
               position: 'absolute',
               zIndex: 5,
               top: 0,
               right: '30px',
               width: '162.45px',
               height: '49.48px',
-              gap: '6.16px',
               borderRadius: '55.45px',
               background: '#fece1f',
               color: '#181B29',
@@ -98,8 +95,8 @@ const ProductCard: React.FC<ProductProps> = ({
               padding: '9.24px 24.64px',
             }}
           >
-            <span
-              style={{
+            <Typography
+              sx={{
                 fontFamily: 'Inter',
                 fontWeight: 600,
                 fontSize: '16px',
@@ -108,17 +105,21 @@ const ProductCard: React.FC<ProductProps> = ({
               }}
             >
               🚀 {badge}
-            </span>
-          </span>
+            </Typography>
+          </Box>
         )}
 
         <Box
           display="flex"
-          justifyContent={'space-between'}
-          alignItems={'center'}
-          gap={'8px'}
+          justifyContent="space-between"
+          alignItems="center"
+          gap="8px"
         >
-          <StyledRadio checked={selected} onChange={onSelect} />
+          <StyledRadio
+            checked={selected}
+            onChange={onSelect}
+            sx={{ flexShrink: 0 }}
+          />
           <Typography
             variant="h6"
             sx={{
@@ -139,21 +140,21 @@ const ProductCard: React.FC<ProductProps> = ({
             sx={{ color: 'common.black' }}
           >
             {oldPrice && (
-              <span
-                style={{
+              <Typography
+                sx={{
                   fontWeight: 400,
                   fontSize: '12px',
                   lineHeight: '20px',
                   letterSpacing: '0.5px',
-                  opacity: '80%',
+                  opacity: 0.8,
                   textDecoration: 'line-through red',
                 }}
               >
                 ${oldPrice.toFixed(2)}
-              </span>
+              </Typography>
             )}
-            <span
-              style={{
+            <Typography
+              sx={{
                 color: '#3B71F7',
                 fontWeight: 700,
                 fontSize: '20px',
@@ -162,9 +163,9 @@ const ProductCard: React.FC<ProductProps> = ({
               }}
             >
               ${price.toFixed(2)}
-            </span>
-            <span
-              style={{
+            </Typography>
+            <Typography
+              sx={{
                 color: '#181B29',
                 fontWeight: 400,
                 fontSize: '12px',
@@ -173,7 +174,7 @@ const ProductCard: React.FC<ProductProps> = ({
               }}
             >
               {period}
-            </span>
+            </Typography>
           </Box>
         </Box>
       </Box>
