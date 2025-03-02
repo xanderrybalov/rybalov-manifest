@@ -47,29 +47,37 @@ const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
 
   return (
-    <Container maxWidth="xs" sx={{ py: '77px' }}>
+    <Container sx={{ py: '77px' }}>
       <MainTitle text="Choose your plan:" />
-
       <Box
         display="flex"
         flexDirection="column"
-        gap={'25px'}
+        gap={'20px'}
         sx={{ pt: '45px', pb: '24px' }}
       >
-        {plans.map((plan) => (
-          <ProductCard
-            key={plan.id}
-            name={plan.name}
-            oldPrice={plan.oldPrice}
-            price={plan.price}
-            currency={plan.currency}
-            discount={plan.discount}
-            badge={plan.badge}
-            period={plan.period}
-            selected={selectedPlan === plan.id}
-            onSelect={() => setSelectedPlan(plan.id)}
-          />
-        ))}
+        <Box
+          display="grid"
+          sx={{
+            gridAutoRows: '1fr',
+            gridRowGap: '20px',
+            width: '100%',
+          }}
+        >
+          {plans.map((plan) => (
+            <ProductCard
+              key={plan.id}
+              name={plan.name}
+              oldPrice={plan.oldPrice}
+              price={plan.price}
+              currency={plan.currency}
+              discount={plan.discount}
+              badge={plan.badge}
+              period={plan.period}
+              selected={selectedPlan === plan.id}
+              onSelect={() => setSelectedPlan(plan.id)}
+            />
+          ))}
+        </Box>
         <Container
           sx={{
             alignItems: 'center',

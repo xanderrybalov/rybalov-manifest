@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Card, CardContent, Typography, Box, Radio } from '@mui/material';
+import { Card, Typography, Box, Radio } from '@mui/material';
 
 interface ProductProps {
   name: string;
@@ -32,7 +32,8 @@ const ProductCard: React.FC<ProductProps> = ({
         borderColor: selected ? '#00B39B' : '#d7f4f3',
         borderRadius: 3,
         cursor: 'pointer',
-        p: 2,
+        width: 'auto',
+        height: '100%',
         transition: '0.3s',
         position: 'relative',
         overflow: 'visible',
@@ -40,7 +41,7 @@ const ProductCard: React.FC<ProductProps> = ({
       }}
       onClick={onSelect}
     >
-      <CardContent>
+      <Box sx={{ padding: '12px 16px 12px 12px' }}>
         {/* Discount */}
         {discount && (
           <span
@@ -81,15 +82,15 @@ const ProductCard: React.FC<ProductProps> = ({
             style={{
               position: 'absolute',
               zIndex: 5,
-              top: '-32px',
-              left: '200px',
+              top: 0,
+              right: '30px',
               width: '162.45px',
               height: '49.48px',
               gap: '6.16px',
               borderRadius: '55.45px',
               background: '#fece1f',
               color: '#181B29',
-              transform: 'rotate(4.26deg)',
+              transform: 'translateY(-80%) rotate(3deg)',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -110,28 +111,39 @@ const ProductCard: React.FC<ProductProps> = ({
           </span>
         )}
 
-        <Box display="flex" alignItems="center" mt={1}>
-          <Radio checked={selected} onChange={onSelect} color="primary" />
-          <Typography variant="h6">{name}</Typography>
-        </Box>
-
-        <Box display="flex" alignItems="center" mt={1}>
-          {oldPrice && (
-            <Typography
-              variant="body2"
-              sx={{ textDecoration: 'line-through', color: 'grey.500', mr: 1 }}
-            >
-              ${oldPrice.toFixed(2)}
+        <Box display="flex" justifyContent={'space-between'}>
+          <Box display="flex" alignItems="center">
+            <Radio checked={selected} onChange={onSelect} color="primary" />
+            <Typography variant="h6">{name}</Typography>
+          </Box>
+          <Box
+            display="flex"
+            alignItems="flex-end"
+            flexDirection="column"
+            flexGrow={1}
+            sx={{ color: 'common.black' }}
+          >
+            {oldPrice && (
+              <Typography
+                variant="body2"
+                sx={{
+                  textDecoration: 'line-through',
+                  color: 'grey.500',
+                  mr: 1,
+                }}
+              >
+                ${oldPrice.toFixed(2)}
+              </Typography>
+            )}
+            <Typography variant="h5" color="primary">
+              ${price.toFixed(2)}
             </Typography>
-          )}
-          <Typography variant="h5" color="primary">
-            ${price.toFixed(2)}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'grey.600', ml: 1 }}>
-            {period}
-          </Typography>
+            <Typography variant="body2" sx={{ color: 'grey.600', ml: 1 }}>
+              {period}
+            </Typography>
+          </Box>
         </Box>
-      </CardContent>
+      </Box>
     </Card>
   );
 };
