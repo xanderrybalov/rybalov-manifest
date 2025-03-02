@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import { Container, Typography, Box, useTheme } from '@mui/material';
 import ProductCard from './ProductCard';
 import MainTitle from './components/MainTitle';
 import FilledButton from './components/FilledButton';
@@ -45,6 +45,7 @@ const plans: {
 
 const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
+  const theme = useTheme();
 
   return (
     <Container sx={{ py: '77px' }}>
@@ -61,6 +62,10 @@ const PricingTable: React.FC = () => {
             gridAutoRows: '1fr',
             gridRowGap: '20px',
             width: '100%',
+            [theme.breakpoints.up('md')]: {
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '0 20px',
+            },
           }}
         >
           {plans.map((plan) => (

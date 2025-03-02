@@ -1,8 +1,8 @@
 import { Radio, styled } from '@mui/material';
 
 const StyledRadio = styled(Radio)({
-  padding: 0, // Убираем внутренние отступы
-  position: 'relative', // Позволяет позиционировать галочку
+  padding: 0,
+  position: 'relative',
 
   '&.MuiRadio-root': {
     display: 'flex',
@@ -11,20 +11,20 @@ const StyledRadio = styled(Radio)({
     height: '20px',
     borderRadius: '50%',
     backgroundPosition: '50%',
-    border: '2px solid var(--color-common-black)', // Неактивное состояние
+    border: '2px solid var(--color-common-black)',
     backgroundColor: 'transparent',
   },
 
   '&.Mui-checked': {
-    border: 'none', // Убираем бордер
-    backgroundColor: '#00B39B', // Полностью заливаем зеленым
-    boxShadow: 'none', // Убираем синий glow MUI
-    outline: 'none', // Убираем возможные контуры
-    backgroundImage: 'none', // Убираем стандартный MUI SVG
+    border: 'none',
+    backgroundColor: '#00B39B',
+    boxShadow: 'none',
+    outline: 'none',
+    backgroundImage: 'none',
   },
 
   '&.Mui-checked .MuiSvgIcon-root': {
-    display: 'none', // ⬅️ Скрываем стандартную точку только в активном состоянии
+    display: 'none',
   },
 
   '&.Mui-checked::after': {
@@ -33,9 +33,9 @@ const StyledRadio = styled(Radio)({
     width: '12.62px',
     height: '9.15px',
     position: 'absolute',
-    top: '5.5px', // Регулируем позицию галочки
+    top: '5.5px',
     left: '3.7px',
-    backgroundImage: "url('/check.svg')", // Галочка
+    backgroundImage: "url('/check.svg')",
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
