@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Card, Typography, Box } from '@mui/material';
+import { Card, Typography, Box, useTheme, useMediaQuery } from '@mui/material';
 import StyledRadio from './components/StyledRadio';
 import Image from 'next/image';
 
@@ -26,6 +26,8 @@ const ProductCard: React.FC<ProductProps> = ({
   selected,
   onSelect,
 }) => {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   return (
     <Card
       variant="outlined"
@@ -74,7 +76,6 @@ const ProductCard: React.FC<ProductProps> = ({
           </Typography>
         </Box>
       )}
-
       {/* Badge */}
       {badge && (
         <Box
@@ -109,7 +110,7 @@ const ProductCard: React.FC<ProductProps> = ({
         </Box>
       )}
       {/* Timer of Sales End */}
-      {true && (
+      {isDesktop && (
         <Box
           sx={{
             background: '#181B29',
@@ -138,7 +139,7 @@ const ProductCard: React.FC<ProductProps> = ({
           }}
         >
           <Image
-            aria-hidden
+            aria-hidden="true"
             src="/timer.svg"
             alt="Timer Icon"
             width={18}

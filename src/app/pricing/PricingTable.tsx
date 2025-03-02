@@ -1,9 +1,16 @@
 'use client';
 import React, { useState } from 'react';
-import { Container, Typography, Box, useTheme } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
 import ProductCard from './ProductCard';
 import MainTitle from './components/MainTitle';
 import FilledButton from './components/FilledButton';
+import Timer from './components/Timer';
 
 const plans: {
   id: string;
@@ -46,15 +53,18 @@ const plans: {
 const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
   const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
     <Container sx={{ py: '77px' }}>
       <MainTitle text="Choose your plan:" />
+
+      {!isDesktop && <Timer time={'12:00'} />}
       <Box
         display="flex"
         flexDirection="column"
         gap={'20px'}
-        sx={{ pt: '45px', pb: '24px' }}
+        sx={{ pt: '55px', pb: '24px' }}
       >
         <Box
           display="grid"
