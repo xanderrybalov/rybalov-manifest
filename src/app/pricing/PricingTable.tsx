@@ -102,7 +102,8 @@ const PricingTable: React.FC = () => {
           color="grey.500"
           mt={1}
         >
-          Automatic renewal of {plans.find((p) => p.id === selectedPlan)?.price}{' '}
+          Automatic renewal of {plans.find((p) => p.id === selectedPlan)?.price}
+          {' $ '}
           per month.
           <br /> You may cancel by support@justdone.ai. Our goal is customer
           <br />

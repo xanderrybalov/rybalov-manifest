@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, Typography, Box } from '@mui/material';
 import StyledRadio from './components/StyledRadio';
+import Image from 'next/image';
 
 interface ProductProps {
   name: string;
@@ -43,72 +44,110 @@ const ProductCard: React.FC<ProductProps> = ({
       }}
       onClick={onSelect}
     >
+      {/* Discount */}
+      {discount && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '-16px',
+            left: '44px',
+            borderRadius: '28px',
+            background: '#00B39B',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '4px 9px',
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: 'Inter',
+              fontWeight: 600,
+              fontSize: '12px',
+              lineHeight: '20px',
+              letterSpacing: '0.1px',
+              textAlign: 'center',
+              color: '#FFFFFF',
+            }}
+          >
+            {discount}
+          </Typography>
+        </Box>
+      )}
+
+      {/* Badge */}
+      {badge && (
+        <Box
+          sx={{
+            position: 'absolute',
+            zIndex: 5,
+            top: 0,
+            right: '30px',
+            width: '162.45px',
+            height: '49.48px',
+            borderRadius: '55.45px',
+            background: '#fece1f',
+            color: '#181B29',
+            transform: 'translateY(-80%) rotate(3deg)',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '9.24px 24.64px',
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: 'Inter',
+              fontWeight: 600,
+              fontSize: '16px',
+              lineHeight: '30.81px',
+              letterSpacing: '0.15px',
+            }}
+          >
+            🚀 {badge}
+          </Typography>
+        </Box>
+      )}
+      {/* Timer of Sales End */}
+      {true && (
+        <Box
+          sx={{
+            background: '#181B29',
+            color: '#FFD7A1',
+            display: 'flex',
+            justifyContent: 'center',
+            borderRadius: '8px 8px 0 0',
+            height: '56px',
+            fontWeight: 600,
+            fontSize: '14px',
+            gap: '6px',
+            textAlign: 'center',
+            alignItems: 'center',
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              top: '56px',
+              right: '17px',
+              transform: 'translateX(-50%)',
+              width: '0',
+              height: '0',
+              borderLeft: '8px solid transparent',
+              borderRight: '8px solid transparent',
+              borderTop: '8px solid #181B29',
+            },
+          }}
+        >
+          <Image
+            aria-hidden
+            src="/timer.svg"
+            alt="Timer Icon"
+            width={18}
+            height={18}
+          />
+          SALE ENDS IN {'12:00'}
+        </Box>
+      )}
       <Box sx={{ padding: '12px 16px 12px 12px', position: 'relative' }}>
-        {/* Discount */}
-        {discount && (
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '-16px',
-              left: '44px',
-              borderRadius: '28px',
-              background: '#00B39B',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '4px 9px',
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: 'Inter',
-                fontWeight: 600,
-                fontSize: '12px',
-                lineHeight: '20px',
-                letterSpacing: '0.1px',
-                textAlign: 'center',
-                color: '#FFFFFF',
-              }}
-            >
-              {discount}
-            </Typography>
-          </Box>
-        )}
-
-        {/* Badge */}
-        {badge && (
-          <Box
-            sx={{
-              position: 'absolute',
-              zIndex: 5,
-              top: 0,
-              right: '30px',
-              width: '162.45px',
-              height: '49.48px',
-              borderRadius: '55.45px',
-              background: '#fece1f',
-              color: '#181B29',
-              transform: 'translateY(-80%) rotate(3deg)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '9.24px 24.64px',
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: 'Inter',
-                fontWeight: 600,
-                fontSize: '16px',
-                lineHeight: '30.81px',
-                letterSpacing: '0.15px',
-              }}
-            >
-              🚀 {badge}
-            </Typography>
-          </Box>
-        )}
-
         <Box
           display="flex"
           justifyContent="space-between"
