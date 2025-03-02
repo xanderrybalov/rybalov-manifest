@@ -13,62 +13,63 @@ import FilledButton from './components/FilledButton';
 import Timer from './components/Timer';
 import ToolBar from './components/ToolBar';
 
-const plans: {
+interface Product {
   id: string;
   name: string;
-  oldPrice?: number;
-  price: number;
-  currency: string;
+  regularity: 'month' | 'year' | 'then $39.99 per month';
+  trial_period: number;
+  currency: 'USD';
+  trial_amount: number;
   discount?: string;
   badge?: 'Best value' | 'Most popular';
-  period?: string;
-}[] = [
+}
+
+const plans: Product[] = [
   {
     id: 'monthly',
     name: 'Unlimited 1-monthly Plan',
-    oldPrice: 69.99,
-    price: 39.99,
+    trial_amount: 69.99,
+    trial_period: 39.99,
     currency: 'USD',
     discount: 'Most Popular',
+    regularity: 'month',
   },
   {
     id: 'weekly',
     name: '7-day Access',
-    oldPrice: 10.0,
-    price: 1.0,
+    trial_amount: 10.0,
+    trial_period: 1.0,
     currency: 'USD',
     discount: 'Save 90%',
-    period: 'then $39.99 per month',
+    regularity: 'then $39.99 per month',
   },
   {
     id: 'annual',
     name: 'Unlimited Annual Plan',
-    oldPrice: 49.99,
-    price: 24.99,
+    trial_amount: 49.99,
+    trial_period: 24.99,
     currency: 'USD',
     discount: 'Save 50%',
     badge: 'Best value',
+    regularity: 'month',
   },
 ];
 
 const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
-  const [hydrated, setHydrated] = useState(false); // Флаг, чтобы дождаться загрузки клиента
+  const [hydrated, setHydrated] = useState(false);
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true });
 
-  // Убираем гидрацию
   useEffect(() => {
     setHydrated(true);
   }, []);
 
-  // Используем useMemo, чтобы избежать пересортировки массива при каждом рендере
   const sortedPlans = useMemo(
     () => (isDesktop ? plans : [...plans].reverse()),
     [isDesktop]
   );
 
-  // Ждем, пока завершится гидрация
   if (!hydrated) {
     return null;
   }
@@ -101,12 +102,12 @@ const PricingTable: React.FC = () => {
             <ProductCard
               key={plan.id}
               name={plan.name}
-              oldPrice={plan.oldPrice}
-              price={plan.price}
+              trial_amount={plan.trial_amount}
+              trial_period={plan.trial_period}
               currency={plan.currency}
               discount={plan.discount}
               badge={plan.badge}
-              period={plan.period}
+              period={plan.regularity}
               selected={selectedPlan === plan.id}
               onSelect={() => setSelectedPlan(plan.id)}
             />
@@ -132,7 +133,7 @@ const PricingTable: React.FC = () => {
           mt={1}
         >
           Automatic renewal of{' '}
-          {plans.find((p) => p.id === selectedPlan)?.price.toFixed(2)}
+          {plans.find((p) => p.id === selectedPlan)?.trial_period.toFixed(2)}
           {' $ '}
           per month.
           <br /> You may cancel by support@justdone.ai. Our goal is customer
