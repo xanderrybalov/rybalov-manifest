@@ -135,7 +135,7 @@ const PricingTable: React.FC = () => {
             <ProductCard
               key={plan.id}
               name={plan.name}
-              trial_amount={plan.trial_amount}
+              trial_amount={!timerExpired ? plan.trial_amount : null}
               trial_period={plan.trial_period}
               currency={plan.currency}
               discount={!timerExpired ? plan.discount : undefined}
@@ -144,6 +144,7 @@ const PricingTable: React.FC = () => {
               selected={selectedPlan === plan.id}
               onSelect={() => setSelectedPlan(plan.id)}
               timer={time}
+              timerExpired={timerExpired}
             />
           ))}
         </Box>

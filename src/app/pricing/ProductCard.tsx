@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 interface ProductProps {
   name: string;
-  trial_amount: number;
+  trial_amount: number | null;
   trial_period: number;
   currency: string;
   period?: string;
@@ -14,6 +14,7 @@ interface ProductProps {
   discount?: string;
   selected: boolean;
   timer: string;
+  timerExpired: boolean;
   onSelect: () => void;
 }
 
@@ -26,6 +27,7 @@ const ProductCard: React.FC<ProductProps> = ({
   discount,
   selected,
   timer,
+  timerExpired,
   onSelect,
 }) => {
   const theme = useTheme();
@@ -41,6 +43,7 @@ const ProductCard: React.FC<ProductProps> = ({
         cursor: 'pointer',
         width: 'auto',
         height: '100%',
+        minHeight: '95px',
         transition: '0.3s',
         position: 'relative',
         overflow: 'visible',
@@ -112,7 +115,7 @@ const ProductCard: React.FC<ProductProps> = ({
         </Box>
       )}
       {/* Timer of Sales End */}
-      {isDesktop && (
+      {isDesktop && !timerExpired && (
         <Box
           sx={{
             background: '#181B29',
@@ -150,7 +153,12 @@ const ProductCard: React.FC<ProductProps> = ({
           SALE ENDS IN {timer}
         </Box>
       )}
-      <Box sx={{ padding: '12px 16px 12px 12px', position: 'relative' }}>
+      <Box
+        sx={{
+          padding: timerExpired ? '23px 16px 12px 12px' : '12px 16px 12px 12px',
+          position: 'relative',
+        }}
+      >
         <Box
           display="flex"
           justifyContent="space-between"
