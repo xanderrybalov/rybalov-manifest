@@ -23,6 +23,7 @@ interface Product {
   trial_amount: number;
   discount?: string;
   badge?: 'Best value' | 'Most popular';
+  discount_time: string;
 }
 
 const plans: Product[] = [
@@ -34,6 +35,7 @@ const plans: Product[] = [
     currency: 'USD',
     discount: 'Most Popular',
     regularity: 'month',
+    discount_time: '12:10',
   },
   {
     id: 'weekly',
@@ -42,7 +44,8 @@ const plans: Product[] = [
     trial_period: 1.0,
     currency: 'USD',
     discount: 'Save 90%',
-    regularity: 'then $39.99 per month',
+    regularity: 'month',
+    discount_time: '10:10',
   },
   {
     id: 'annual',
@@ -53,16 +56,23 @@ const plans: Product[] = [
     discount: 'Save 50%',
     badge: 'Best value',
     regularity: 'month',
+    discount_time: '09:10',
   },
 ];
 
 const PricingTable: React.FC = () => {
-  const isTestVariant = useFeatureIsOn('ab_test_version'); // Check if user is in test group
+  const isTestVariant = useFeatureIsOn('ab_test_version');
 
-  const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
+  const [selectedPlan, setSelectedPlan] = useState<string>('monthly');
   const [hydrated, setHydrated] = useState(false);
   const [timerExpired, setTimerExpired] = useState(false);
-  const [time, setTime] = useState('12:00');
+
+  // Global state for each card's time
+  const [timers, setTimers] = useState<Record<string, string>>({
+    monthly: plans.find((p) => p.id === 'monthly')?.discount_time || '00:00',
+    weekly: plans.find((p) => p.id === 'weekly')?.discount_time || '00:00',
+    annual: plans.find((p) => p.id === 'annual')?.discount_time || '00:00',
+  });
 
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true });
@@ -70,57 +80,47 @@ const PricingTable: React.FC = () => {
   useEffect(() => {
     setHydrated(true);
     if (typeof window === 'undefined') return;
+  }, []);
 
-    if (!isTestVariant) {
-      setTimerExpired(true);
-      setTime('00:00');
-      localStorage.setItem('timerExpired', 'true');
-      localStorage.setItem('remainingTime', '00:00');
-      return;
-    }
-
-    const storedTime = localStorage.getItem('remainingTime');
-    const storedTimerExpired = localStorage.getItem('timerExpired');
-
-    if (storedTimerExpired === 'true' && storedTime === '00:00') {
-      setTimerExpired(true);
-      setTime('00:00');
-      return;
-    }
-
-    if (storedTime) {
-      setTime(storedTime);
-    }
+  useEffect(() => {
+    if (!isTestVariant || timerExpired) return;
 
     const interval = setInterval(() => {
-      setTime((prevTime) => {
-        const [minutes, seconds] = prevTime.split(':').map(Number);
-        if (minutes === 0 && seconds === 0) {
-          localStorage.setItem('timerExpired', 'true');
-          return '00:00';
+      setTimers((prevTimers) => {
+        const newTimers = { ...prevTimers };
+        let allExpired = true;
+
+        Object.keys(newTimers).forEach((planId) => {
+          const [minutes, seconds] = newTimers[planId].split(':').map(Number);
+
+          if (minutes === 0 && seconds === 0) {
+            newTimers[planId] = '00:00';
+          } else {
+            allExpired = false;
+            let newMinutes = minutes;
+            let newSeconds = seconds - 1;
+
+            if (newSeconds < 0) {
+              newMinutes -= 1;
+              newSeconds = 59;
+            }
+
+            newTimers[planId] =
+              `${newMinutes.toString().padStart(2, '0')}:${newSeconds.toString().padStart(2, '0')}`;
+          }
+        });
+
+        if (allExpired) {
+          setTimerExpired(true);
+          clearInterval(interval);
         }
 
-        let newMinutes = minutes;
-        let newSeconds = seconds - 1;
-
-        if (newSeconds < 0) {
-          newMinutes -= 1;
-          newSeconds = 59;
-        }
-
-        const updatedTime = `${newMinutes.toString().padStart(2, '0')}:${newSeconds
-          .toString()
-          .padStart(2, '0')}`;
-
-        localStorage.setItem('remainingTime', updatedTime);
-
-        return updatedTime;
+        return newTimers;
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isTestVariant]);
-
+  }, [isTestVariant, timerExpired]);
   const sortedPlans = useMemo(
     () => (isDesktop ? plans : [...plans].reverse()),
     [isDesktop]
@@ -133,9 +133,9 @@ const PricingTable: React.FC = () => {
       <MainTitle text="Choose your plan:" />
       <ToolBar />
 
-      {/* Show timer only if user is in test group */}
-      {isTestVariant && !isDesktop && !timerExpired && <Timer time={time} />}
-
+      {isTestVariant && !isDesktop && !timerExpired && (
+        <Timer time={timers[selectedPlan]} />
+      )}
       <Box
         display="flex"
         flexDirection="column"
@@ -166,7 +166,7 @@ const PricingTable: React.FC = () => {
               period={plan.regularity}
               selected={selectedPlan === plan.id}
               onSelect={() => setSelectedPlan(plan.id)}
-              timer={time}
+              timer={timers[plan.id]}
               timerExpired={timerExpired}
               isTestVariant={isTestVariant}
             />
