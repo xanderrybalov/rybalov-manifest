@@ -2,6 +2,8 @@
 
 Welcome to our A/B Testing project using **GrowthBook**! Follow these simple steps to set up and run the project locally.  
 
+PLEASE use only main branch
+
 ---
 
 ## **📌 Prerequisites**
