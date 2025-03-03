@@ -1,10 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+### 🚀 **Getting Started: Launching the Project**  
 
-## Getting Started
+Welcome to our A/B Testing project using **GrowthBook**! Follow these simple steps to set up and run the project locally.  
 
-First, run the development server:
+---
 
-```bash
+## **📌 Prerequisites**
+Before starting, make sure you have:  
+✅ **Node.js 18+** installed  
+✅ **Package manager** (`npm`, `yarn`, `pnpm`, or `bun`)  
+
+---
+
+## **⚡ Step 1: Install Dependencies**
+First, install all necessary packages:  
+
+```sh
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+---
+
+## **🚀 Step 2: Run the Development Server**
+Start the project using your preferred package manager:
+
+```sh
 npm run dev
 # or
 yarn dev
@@ -13,24 +38,22 @@ pnpm dev
 # or
 bun dev
 ```
+Now open **[http://localhost:3000](http://localhost:3000)** in your browser. 🎉  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## **🔧 Step 3: Configure GrowthBook**
+To enable A/B testing, **add your GrowthBook API Key** in `growthbookProvider.tsx`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```tsx
+import { GrowthBook } from "@growthbook/growthbook-react";
 
-## Learn More
+const growthbook = new GrowthBook({
+  apiHost: "https://cdn.growthbook.io", // API Host
+  clientKey: "your-key-here", // 🔑 Your SDK API Key
+  enableDevMode: process.env.NODE_ENV !== "production",
+});
+```
+📌 **Replace** `"your-key-here"` with your actual **GrowthBook SDK API Key** (found in **GrowthBook → Settings → API Keys**).  
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
