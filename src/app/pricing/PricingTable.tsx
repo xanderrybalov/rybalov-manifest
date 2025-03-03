@@ -71,7 +71,6 @@ const PricingTable: React.FC = () => {
     setHydrated(true);
     if (typeof window === 'undefined') return;
 
-    // Если isTestVariant === false, сразу обнуляем таймер
     if (!isTestVariant) {
       setTimerExpired(true);
       setTime('00:00');
