@@ -17,7 +17,7 @@ import { useFeatureIsOn } from '@growthbook/growthbook-react';
 interface Product {
   id: string;
   name: string;
-  regularity: 'month' | 'year' | 'then $39.99 per month';
+  regularity: 'month' | 'year';
   trial_period: number;
   currency: 'USD';
   trial_amount: number;
