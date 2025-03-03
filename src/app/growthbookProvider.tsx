@@ -5,7 +5,7 @@ import { GrowthBook, GrowthBookProvider } from '@growthbook/growthbook-react';
 
 const growthbook = new GrowthBook({
   apiHost: 'https://cdn.growthbook.io', // API Host
-  clientKey: 'sdk-YZwdW1G2rafpgDgU', // Your SDK API Key
+  clientKey: 'your-key', // Your SDK API Key
   enableDevMode: process.env.NODE_ENV !== 'production',
 });
 
