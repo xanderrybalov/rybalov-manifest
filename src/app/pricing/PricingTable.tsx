@@ -59,28 +59,34 @@ const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
   const [hydrated, setHydrated] = useState(false);
   const [timerExpired, setTimerExpired] = useState(false);
-  const [time, setTime] = useState('12:00');
+  const [time, setTime] = useState('00:10');
 
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true });
 
   useEffect(() => {
     setHydrated(true);
-
     if (typeof window === 'undefined') return;
 
-    const storedTimer = localStorage.getItem('timerExpired');
-    if (storedTimer === 'true') {
+    const storedTime = localStorage.getItem('remainingTime');
+    const storedTimerExpired = localStorage.getItem('timerExpired');
+
+    // Если время истекло И страница была перезагружена, ставим таймер в "истекший" режим
+    if (storedTimerExpired === 'true' && storedTime === '00:00') {
       setTimerExpired(true);
+      setTime('00:00');
       return;
+    }
+
+    if (storedTime) {
+      setTime(storedTime);
     }
 
     const interval = setInterval(() => {
       setTime((prevTime) => {
         const [minutes, seconds] = prevTime.split(':').map(Number);
         if (minutes === 0 && seconds === 0) {
-          localStorage.setItem('timerExpired', 'true');
-          setTimerExpired(true);
+          localStorage.setItem('timerExpired', 'true'); // Просто сохраняем, но не вызываем setTimerExpired
           return '00:00';
         }
 
@@ -92,9 +98,13 @@ const PricingTable: React.FC = () => {
           newSeconds = 59;
         }
 
-        return `${newMinutes.toString().padStart(2, '0')}:${newSeconds
+        const updatedTime = `${newMinutes.toString().padStart(2, '0')}:${newSeconds
           .toString()
           .padStart(2, '0')}`;
+
+        localStorage.setItem('remainingTime', updatedTime);
+
+        return updatedTime;
       });
     }, 1000);
 
