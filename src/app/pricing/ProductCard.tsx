@@ -15,6 +15,7 @@ interface ProductProps {
   selected: boolean;
   timer: string;
   timerExpired: boolean;
+  isTestVariant: boolean;
   onSelect: () => void;
 }
 
@@ -28,6 +29,7 @@ const ProductCard: React.FC<ProductProps> = ({
   selected,
   timer,
   timerExpired,
+  isTestVariant,
   onSelect,
 }) => {
   const theme = useTheme();
@@ -115,7 +117,7 @@ const ProductCard: React.FC<ProductProps> = ({
         </Box>
       )}
       {/* Timer of Sales End */}
-      {isDesktop && !timerExpired && (
+      {isTestVariant && isDesktop && !timerExpired && (
         <Box
           sx={{
             background: '#181B29',
