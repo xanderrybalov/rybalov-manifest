@@ -12,6 +12,7 @@ import MainTitle from './components/MainTitle';
 import FilledButton from './components/FilledButton';
 import Timer from './components/Timer';
 import ToolBar from './components/ToolBar';
+import { useFeatureIsOn } from '@growthbook/growthbook-react';
 
 interface Product {
   id: string;
@@ -56,10 +57,12 @@ const plans: Product[] = [
 ];
 
 const PricingTable: React.FC = () => {
+  const isTestVariant = useFeatureIsOn('ab_test_version'); // Check if user is in test group
+
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
   const [hydrated, setHydrated] = useState(false);
   const [timerExpired, setTimerExpired] = useState(false);
-  const [time, setTime] = useState('00:10');
+  const [time, setTime] = useState('12:00');
 
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true });
@@ -67,6 +70,15 @@ const PricingTable: React.FC = () => {
   useEffect(() => {
     setHydrated(true);
     if (typeof window === 'undefined') return;
+
+    // Если isTestVariant === false, сразу обнуляем таймер
+    if (!isTestVariant) {
+      setTimerExpired(true);
+      setTime('00:00');
+      localStorage.setItem('timerExpired', 'true');
+      localStorage.setItem('remainingTime', '00:00');
+      return;
+    }
 
     const storedTime = localStorage.getItem('remainingTime');
     const storedTimerExpired = localStorage.getItem('timerExpired');
@@ -108,7 +120,7 @@ const PricingTable: React.FC = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isTestVariant]);
 
   const sortedPlans = useMemo(
     () => (isDesktop ? plans : [...plans].reverse()),
@@ -121,7 +133,10 @@ const PricingTable: React.FC = () => {
     <Container sx={{ py: '77px' }}>
       <MainTitle text="Choose your plan:" />
       <ToolBar />
-      {!isDesktop && !timerExpired && <Timer time={time} />}{' '}
+
+      {/* Show timer only if user is in test group */}
+      {isTestVariant && !isDesktop && !timerExpired && <Timer time={time} />}
+
       <Box
         display="flex"
         flexDirection="column"
@@ -154,6 +169,7 @@ const PricingTable: React.FC = () => {
               onSelect={() => setSelectedPlan(plan.id)}
               timer={time}
               timerExpired={timerExpired}
+              isTestVariant={isTestVariant}
             />
           ))}
         </Box>
