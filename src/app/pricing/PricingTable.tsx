@@ -71,7 +71,6 @@ const PricingTable: React.FC = () => {
     const storedTime = localStorage.getItem('remainingTime');
     const storedTimerExpired = localStorage.getItem('timerExpired');
 
-    // Если время истекло И страница была перезагружена, ставим таймер в "истекший" режим
     if (storedTimerExpired === 'true' && storedTime === '00:00') {
       setTimerExpired(true);
       setTime('00:00');
@@ -86,7 +85,7 @@ const PricingTable: React.FC = () => {
       setTime((prevTime) => {
         const [minutes, seconds] = prevTime.split(':').map(Number);
         if (minutes === 0 && seconds === 0) {
-          localStorage.setItem('timerExpired', 'true'); // Просто сохраняем, но не вызываем setTimerExpired
+          localStorage.setItem('timerExpired', 'true');
           return '00:00';
         }
 
