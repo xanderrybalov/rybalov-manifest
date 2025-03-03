@@ -13,72 +13,115 @@ import FilledButton from './components/FilledButton';
 import Timer from './components/Timer';
 import ToolBar from './components/ToolBar';
 
-const plans: {
+interface Product {
   id: string;
   name: string;
-  oldPrice?: number;
-  price: number;
-  currency: string;
+  regularity: 'month' | 'year' | 'then $39.99 per month';
+  trial_period: number;
+  currency: 'USD';
+  trial_amount: number;
   discount?: string;
   badge?: 'Best value' | 'Most popular';
-  period?: string;
-}[] = [
+}
+
+const plans: Product[] = [
   {
     id: 'monthly',
     name: 'Unlimited 1-monthly Plan',
-    oldPrice: 69.99,
-    price: 39.99,
+    trial_amount: 69.99,
+    trial_period: 39.99,
     currency: 'USD',
     discount: 'Most Popular',
+    regularity: 'month',
   },
   {
     id: 'weekly',
     name: '7-day Access',
-    oldPrice: 10.0,
-    price: 1.0,
+    trial_amount: 10.0,
+    trial_period: 1.0,
     currency: 'USD',
     discount: 'Save 90%',
-    period: 'then $39.99 per month',
+    regularity: 'then $39.99 per month',
   },
   {
     id: 'annual',
     name: 'Unlimited Annual Plan',
-    oldPrice: 49.99,
-    price: 24.99,
+    trial_amount: 49.99,
+    trial_period: 24.99,
     currency: 'USD',
     discount: 'Save 50%',
     badge: 'Best value',
+    regularity: 'month',
   },
 ];
 
 const PricingTable: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>('monthly');
-  const [hydrated, setHydrated] = useState(false); // Флаг, чтобы дождаться загрузки клиента
+  const [hydrated, setHydrated] = useState(false);
+  const [timerExpired, setTimerExpired] = useState(false);
+  const [time, setTime] = useState('00:10');
+
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'), { noSsr: true });
 
-  // Убираем гидрацию
   useEffect(() => {
     setHydrated(true);
+    if (typeof window === 'undefined') return;
+
+    const storedTime = localStorage.getItem('remainingTime');
+    const storedTimerExpired = localStorage.getItem('timerExpired');
+
+    if (storedTimerExpired === 'true' && storedTime === '00:00') {
+      setTimerExpired(true);
+      setTime('00:00');
+      return;
+    }
+
+    if (storedTime) {
+      setTime(storedTime);
+    }
+
+    const interval = setInterval(() => {
+      setTime((prevTime) => {
+        const [minutes, seconds] = prevTime.split(':').map(Number);
+        if (minutes === 0 && seconds === 0) {
+          localStorage.setItem('timerExpired', 'true');
+          return '00:00';
+        }
+
+        let newMinutes = minutes;
+        let newSeconds = seconds - 1;
+
+        if (newSeconds < 0) {
+          newMinutes -= 1;
+          newSeconds = 59;
+        }
+
+        const updatedTime = `${newMinutes.toString().padStart(2, '0')}:${newSeconds
+          .toString()
+          .padStart(2, '0')}`;
+
+        localStorage.setItem('remainingTime', updatedTime);
+
+        return updatedTime;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
-  // Используем useMemo, чтобы избежать пересортировки массива при каждом рендере
   const sortedPlans = useMemo(
     () => (isDesktop ? plans : [...plans].reverse()),
     [isDesktop]
   );
 
-  // Ждем, пока завершится гидрация
-  if (!hydrated) {
-    return null;
-  }
+  if (!hydrated) return null;
 
   return (
     <Container sx={{ py: '77px' }}>
       <MainTitle text="Choose your plan:" />
       <ToolBar />
-
-      {!isDesktop && <Timer time={'12:00'} />}
+      {!isDesktop && !timerExpired && <Timer time={time} />}{' '}
       <Box
         display="flex"
         flexDirection="column"
@@ -101,17 +144,20 @@ const PricingTable: React.FC = () => {
             <ProductCard
               key={plan.id}
               name={plan.name}
-              oldPrice={plan.oldPrice}
-              price={plan.price}
+              trial_amount={!timerExpired ? plan.trial_amount : null}
+              trial_period={plan.trial_period}
               currency={plan.currency}
-              discount={plan.discount}
+              discount={!timerExpired ? plan.discount : undefined}
               badge={plan.badge}
-              period={plan.period}
+              period={plan.regularity}
               selected={selectedPlan === plan.id}
               onSelect={() => setSelectedPlan(plan.id)}
+              timer={time}
+              timerExpired={timerExpired}
             />
           ))}
         </Box>
+
         <Container
           sx={{
             alignItems: 'center',
@@ -122,22 +168,54 @@ const PricingTable: React.FC = () => {
           <FilledButton
             sx={{ alignItems: 'center', display: 'flex' }}
             text="Get Started"
+            onClick={() => {
+              const selectedProduct = plans.find((p) => p.id === selectedPlan);
+              if (selectedProduct) {
+                console.log(
+                  `SelectedProduct: ID = ${selectedProduct.id}, Name = ${selectedProduct.name}`
+                );
+              }
+            }}
           />
         </Container>
         <Typography
           variant="caption"
           align="center"
           display="block"
-          color="grey.500"
-          mt={1}
+          sx={{
+            fontFamily: 'Inter',
+            fontWeight: 400,
+            fontSize: '12px',
+            lineHeight: '20px',
+            letterSpacing: '0.1px',
+            textAlign: 'center',
+            color: 'grey.500',
+          }}
         >
           Automatic renewal of{' '}
-          {plans.find((p) => p.id === selectedPlan)?.price.toFixed(2)}
+          {plans.find((p) => p.id === selectedPlan)?.trial_period.toFixed(2)}
           {' $ '}
           per month.
-          <br /> You may cancel by support@justdone.ai. Our goal is customer
           <br />
-          satisfaction
+          You may cancel by{' '}
+          <Typography
+            component="a"
+            href="mailto:support@justdone.ai"
+            sx={{
+              fontFamily: 'Inter',
+              fontWeight: 400,
+              fontSize: '12px',
+              lineHeight: '20px',
+              letterSpacing: '0.1px',
+              textAlign: 'center',
+              textDecoration: 'underline',
+              color: 'inherit',
+              '&:hover': { color: 'primary.main' },
+            }}
+          >
+            support@justdone.ai
+          </Typography>
+          . Our goal is customer <br /> satisfaction.
         </Typography>
       </Box>
     </Container>

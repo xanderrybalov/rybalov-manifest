@@ -6,24 +6,28 @@ import Image from 'next/image';
 
 interface ProductProps {
   name: string;
-  oldPrice?: number;
-  price: number;
+  trial_amount: number | null;
+  trial_period: number;
   currency: string;
   period?: string;
   badge?: 'Best value' | 'Most popular';
   discount?: string;
   selected: boolean;
+  timer: string;
+  timerExpired: boolean;
   onSelect: () => void;
 }
 
 const ProductCard: React.FC<ProductProps> = ({
   name,
-  oldPrice,
-  price,
+  trial_amount,
+  trial_period,
   period = 'per month',
   badge,
   discount,
   selected,
+  timer,
+  timerExpired,
   onSelect,
 }) => {
   const theme = useTheme();
@@ -39,6 +43,7 @@ const ProductCard: React.FC<ProductProps> = ({
         cursor: 'pointer',
         width: 'auto',
         height: '100%',
+        minHeight: '95px',
         transition: '0.3s',
         position: 'relative',
         overflow: 'visible',
@@ -110,7 +115,7 @@ const ProductCard: React.FC<ProductProps> = ({
         </Box>
       )}
       {/* Timer of Sales End */}
-      {isDesktop && (
+      {isDesktop && !timerExpired && (
         <Box
           sx={{
             background: '#181B29',
@@ -145,10 +150,15 @@ const ProductCard: React.FC<ProductProps> = ({
             width={18}
             height={18}
           />
-          SALE ENDS IN {'12:00'}
+          SALE ENDS IN {timer}
         </Box>
       )}
-      <Box sx={{ padding: '12px 16px 12px 12px', position: 'relative' }}>
+      <Box
+        sx={{
+          padding: timerExpired ? '23px 16px 12px 12px' : '12px 16px 12px 12px',
+          position: 'relative',
+        }}
+      >
         <Box
           display="flex"
           justifyContent="space-between"
@@ -179,7 +189,7 @@ const ProductCard: React.FC<ProductProps> = ({
             flexGrow={1}
             sx={{ color: 'common.black' }}
           >
-            {oldPrice && (
+            {trial_amount && (
               <Typography
                 sx={{
                   fontWeight: 400,
@@ -190,7 +200,7 @@ const ProductCard: React.FC<ProductProps> = ({
                   textDecoration: 'line-through red',
                 }}
               >
-                ${oldPrice.toFixed(2)}
+                ${trial_amount.toFixed(2)}
               </Typography>
             )}
             <Typography
@@ -202,7 +212,7 @@ const ProductCard: React.FC<ProductProps> = ({
                 letterSpacing: '0.1px',
               }}
             >
-              ${price.toFixed(2)}
+              ${trial_period.toFixed(2)}
             </Typography>
             <Typography
               sx={{
